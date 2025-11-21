@@ -13,8 +13,19 @@ const db = new sqlite3.Database('./foodtrack.db');
 const PORT = process.env.PORT || 3000;
 const JWT_SECRET = process.env.JWT_SECRET || 'CHANGE_ME_IN_PRODUCTION';
 
-app.use(cors());
+// ✅ IMPROVED CORS CONFIGURATION
+app.use(cors({
+  origin: '*', // Allow all origins (for development/testing)
+  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true
+}));
+
+// Add OPTIONS handler for preflight requests
+app.options('*', cors());
+
 app.use(express.json());
+
 
 // Create tables if they don't exist
 db.serialize(() => {
